@@ -5,9 +5,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rock Paper Scissors Game</title>
+    <link rel="stylesheet" href="main.css">
 </head>
 
 <body>
+    <div class="container">
+        <h1 class="title">Let's play Frog,Slug and Snake Game</h1>
+        <p class="description"><strong>Description:</strong>This game is inspired by the true origin of rock,paper and
+            scissors:
+            "sansukumi-ken".<br />
+            The game has three entities:the frog,the slug and the snake, who are afraid of one another.<br />
+            Frog wins against the slug, which in turn wins against the snake and the snake wins against the frog.<br />
+            You are pitted against the computer in this game, you should choose one option amongst the three given below
+            and<br />
+            the computer will also choose one option in each round. If you win against computer, you get one point in
+            one round<br />
+            if computer is the winner it gets one point in one round. The first person to reach 5 score points wins the
+            game<br />
+        </p>
+        <div class="human-choice">
+            <h3>Click on your Choice</h3>
+            <div class="choice-images">
+                <img class="frog" src="public/GamaBunta.jpg" alt="The Frog">
+                <img class="slug" src="public/Katsuyu.jpg" alt="The Slug">
+                <img class="snake" src="public/Manda.jpg" alt="The Snake">
+            </div>
+        </div>
+        <div class="choices-container"></div>
+    </div>
     <script src="script.js"></script>
 </body>
 

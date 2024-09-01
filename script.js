@@ -1,91 +1,172 @@
-// console.log("Hello");
 let humanScore = 0;
 let computerScore = 0;
 //to get computer choice: function definition below
 function getComputerChoice() {
   let randomNumber = Math.random() * 10;
   if (randomNumber < 3.3333) {
-    return "Rock";
+    return "frog";
   } else if (randomNumber < 6.6666) {
-    return "Paper";
+    return "snake";
   } else {
-    return "Scissors";
+    return "slug";
   }
 }
-// console.log(getComputerChoice());
+
 //to get human choice:  function definition below
-function getHumanChoice() {
-  let choice = prompt("Rock,Paper or Scissors?");
-  if ("rock" == choice.toLowerCase()) {
-    return "Rock";
-  } else if ("paper" == choice.toLowerCase()) {
-    return "Paper";
-  } else if ("scissors" == choice.toLowerCase()) {
-    return "Scissors";
-  } else {
-    return "Wrong Choice";
-  }
+function getHumanChoice(event) {
+  return event?.target?.className;
 }
-// console.log(getHumanChoice());
 
 //Function Definition below for playing rounds
 function playRound(computerChoice, humanChoice) {
   console.log("The computer chose:", computerChoice);
   console.log("You chose:", humanChoice);
-  if (computerChoice == "Rock" && humanChoice == "Scissors") {
-    console.log("Rock beats Scissors, computer wins this round");
+  let winnerOfRound = "";
+  let animal = "";
+  if (computerChoice == "frog" && humanChoice == "slug") {
+    console.log("frog beats slug, computer wins this round");
+    winnerOfRound = "Computer";
+    animal = "frog";
     computerScore++;
-  } else if (computerChoice == "Rock" && humanChoice == "Paper") {
-    console.log("Paper beats Rock, you win this round");
+  } else if (computerChoice == "frog" && humanChoice == "snake") {
+    console.log("snake beats frog, you win this round");
+    winnerOfRound = "You";
+    animal = "snake";
     humanScore++;
-  } else if (computerChoice == "Rock" && humanChoice == "Rock") {
+  } else if (computerChoice == "frog" && humanChoice == "frog") {
     console.log("It is a draw!");
-  } else if (computerChoice == "Paper" && humanChoice == "Rock") {
-    console.log("Paper beats Rock, computer wins this round");
+    winnerOfRound = "Draw";
+  } else if (computerChoice == "snake" && humanChoice == "frog") {
+    console.log("snake beats frog, computer wins this round");
+    winnerOfRound = "Computer";
+    animal = "snake";
     computerScore++;
-  } else if (computerChoice == "Paper" && humanChoice == "Scissors") {
-    console.log("Scissors beats Paper, you win this round");
+  } else if (computerChoice == "snake" && humanChoice == "slug") {
+    console.log("slug beats snake, you win this round");
+    winnerOfRound = "You";
+    animal = "slug";
     humanScore++;
-  } else if (computerChoice == "Paper" && humanChoice == "Paper") {
+  } else if (computerChoice == "snake" && humanChoice == "snake") {
     console.log("It is a draw!");
-  } else if (computerChoice == "Scissors" && humanChoice == "Rock") {
-    console.log("Rock beats Scissors, you win this round");
+    winnerOfRound = "Draw";
+  } else if (computerChoice == "slug" && humanChoice == "frog") {
+    console.log("frog beats slug, you win this round");
+    winnerOfRound = "You";
+    animal = "frog";
     humanScore++;
-  } else if (computerChoice == "Scissors" && humanChoice == "Paper") {
-    console.log("Scissors beats Paper, computer wins this round");
+  } else if (computerChoice == "slug" && humanChoice == "snake") {
+    console.log("slug beats snake, computer wins this round");
+    winnerOfRound = "Computer";
+    animal = "slug";
     computerScore++;
   } else {
     console.log("It is a draw!");
+    winnerOfRound = "Draw";
   }
+  console.log("Computer:", computerScore);
+  console.log("Human:", humanScore);
+  return {
+    winner: winnerOfRound,
+    animalSign: animal,
+  };
 }
-function playGame() {
-  for (let i = 0; i < 5; i++) {
-    console.log(`Round ${i + 1}`);
-    const humanSelection = getHumanChoice();
-    const computerSelection = getComputerChoice();
-    if (humanSelection != "Wrong Choice") {
-      //Function call below
-      playRound(computerSelection, humanSelection);
-      console.log("=========================================");
-    } else {
-      alert("You entered a wrong choice, reload the game to play again");
+function getPath(choice) {
+  let path, alt;
+  switch (choice) {
+    case "frog":
+      path = "public/GamaBunta.jpg";
+      alt = "The Frog";
       break;
-    }
+    case "slug":
+      path = "public/Katsuyu.jpg";
+      alt = "The Slug";
+      break;
+    case "snake":
+      path = "public/Manda.jpg";
+      alt = "The Snake";
+      break;
+    default:
+      alt = "";
   }
-  let winner =
-    computerScore > humanScore
-      ? "Computer"
-      : computerScore == humanScore
-      ? "No Winner"
-      : "You";
-  if (winner != "No Winner") {
-    let loser = winner == "Computer" ? "You" : "Computer";
-    let scorediff = Math.abs(computerScore - humanScore);
-    console.log(
-      `After all 5 rounds, the clear winner of the game is ${winner}. ${winner} scored ${scorediff} points more than ${loser}`
-    );
+  console.log(`The Path is ${path} and alt is ${alt}`);
+  return {
+    path: path,
+    alt: alt,
+  };
+}
+const containerDiv = document.querySelector(".container");
+const humanChoiceContainer = document.querySelector(".human-choice");
+const choicesContainer = document.querySelector(".choices-container");
+
+function winnerOfRound(roundResult, yourChoiceDiv, computerChoiceDiv) {
+  let winnerDiv = document.createElement("div");
+  winnerDiv.setAttribute("class", "winner-div");
+  console.log("round result", roundResult);
+  if (roundResult.winner !== "Draw") {
+    const winnerImg = document.createElement("img");
+    const winnerText = document.createElement("h3");
+    const pathOfWinner = getPath(roundResult.animalSign);
+    winnerImg.src = pathOfWinner.path;
+    winnerImg.alt = pathOfWinner.alt;
+    winnerText.textContent = `${roundResult.winner} won this round`;
+    winnerDiv.appendChild(winnerText);
+    winnerDiv.appendChild(winnerImg);
   } else {
-    console.log("The game finished in a draw after all 5 rounds.");
+    const drawText = document.createElement("h3");
+    drawText.textContent = "It is a draw!";
+    winnerDiv.appendChild(drawText);
+  }
+  if (computerScore >= 5 || humanScore >= 5) {
+    const winnerOfGame = document.createElement("div");
+    const winnerGameText = document.createElement("h2");
+    if (computerScore >= 5) {
+      console.log("Computer won the Game!!");
+      winnerGameText.textContent = `Computer won the Game with ${computerScore} points!!`;
+    } else {
+      console.log("You won the Game!!");
+      winnerGameText.textContent = `You won the Game with ${humanScore} points!!`;
+    }
+    winnerOfGame.appendChild(winnerGameText);
+    winnerDiv.appendChild(winnerOfGame);
+    containerDiv.appendChild(winnerDiv);
+  } else {
+    const nextRoundBtn = document.createElement("button");
+    nextRoundBtn.textContent = "Next round";
+    nextRoundBtn.setAttribute("class", "btn-next");
+    winnerDiv.appendChild(nextRoundBtn);
+    containerDiv.appendChild(winnerDiv);
+    nextRoundBtn.addEventListener("click", () => {
+      yourChoiceDiv.remove();
+      computerChoiceDiv.remove();
+      winnerDiv.remove();
+      containerDiv.appendChild(humanChoiceContainer);
+    });
   }
 }
-playGame();
+humanChoiceContainer.addEventListener("click", (e) => {
+  const humanChoice = getHumanChoice(e);
+  const computerChoice = getComputerChoice();
+  const pathOfHuman = getPath(humanChoice);
+  const pathOfComputer = getPath(computerChoice);
+  const winnerSign = playRound(computerChoice, humanChoice);
+  const yourChoiceDiv = document.createElement("div");
+  const computerChoiceDiv = document.createElement("div");
+  const yourChoiceImg = document.createElement("img");
+  const yourChoiceText = document.createElement("h3");
+  yourChoiceText.textContent = "You Chose:";
+  yourChoiceImg.src = pathOfHuman.path;
+  yourChoiceImg.alt = pathOfHuman.alt;
+  const computerChoiceImg = document.createElement("img");
+  const computerChoiceText = document.createElement("h3");
+  computerChoiceText.textContent = "Computer Chose:";
+  computerChoiceImg.src = pathOfComputer.path;
+  computerChoiceImg.alt = pathOfComputer.alt;
+  humanChoiceContainer.remove();
+  yourChoiceDiv.appendChild(yourChoiceText);
+  yourChoiceDiv.appendChild(yourChoiceImg);
+  computerChoiceDiv.appendChild(computerChoiceText);
+  computerChoiceDiv.appendChild(computerChoiceImg);
+  choicesContainer.appendChild(yourChoiceDiv);
+  choicesContainer.appendChild(computerChoiceDiv);
+  winnerOfRound(winnerSign, yourChoiceDiv, computerChoiceDiv);
+});
